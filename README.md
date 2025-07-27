@@ -1,5 +1,9 @@
 # 🧠 Mental Health Treatment Prediction with Streamlit
 
+![Streamlit App](https://img.shields.io/badge/Streamlit-Deployed-success?style=flat&logo=streamlit)
+![License](https://img.shields.io/badge/License-MIT-blue.svg)
+![Python](https://img.shields.io/badge/Python-3.10+-blue?logo=python)
+
 A machine learning web application to predict the likelihood of seeking mental health treatment, based on survey responses from tech industry professionals. Built with **Streamlit**, trained using **scikit-learn**, and deployed to **Streamlit Cloud**.
 
 🔗 **[Live Demo](https://mental-health-model-training-6nwixgo3yrtk54z62pdszd.streamlit.app/)**  
