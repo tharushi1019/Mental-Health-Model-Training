@@ -10,17 +10,23 @@ A machine learning web application to predict the likelihood of seeking mental h
 ## 📂 Project Structure
 
 ```
-
 mental-health-model-training/
-├── app.py                   # Main Streamlit app
-├── model.pkl                # Trained Random Forest model
-├── requirements.txt         # Python dependencies
+├── app.py # 🎯 Main Streamlit app script
+├── model.pkl # 🧠 Trained machine learning model (Random Forest)
+├── requirements.txt # 📦 List of required Python packages
 ├── data/
-│   └── cleaned\_survey.csv   # Cleaned dataset used for training
+│ ├── cleaned_survey.csv # ✅ Cleaned dataset used for training
+│ ├── survey.csv # 📊 Original dataset downloaded from Kaggle
+│ ├── X_test.pkl # 🧪 Test features saved for evaluation
+│ └── y_test.pkl # 🧪 Test labels saved for evaluation
 ├── notebooks/
-│   └── model\_training.ipynb # Jupyter notebook for training
-└── README.md                # You're reading it!
-
+│ ├── .ipynb_checkpoints # ⚙️ Auto-saved notebook checkpoints (can be ignored)
+│ └── model_training.ipynb # 📓 Jupyter Notebook for model training & evaluation
+├── screenshots/
+│ ├── featureanalysis.png # 📷 Screenshot of feature analysis visual
+│ ├── predict.png # 📷 Screenshot of prediction section in the app
+│ └── visuals.png # 📷 Screenshot of EDA visualizations
+└── README.md # 📘 Project overview and documentation
 ````
 
 ---
