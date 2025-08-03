@@ -169,257 +169,116 @@ if section == "🏠 Home":
     if model is None:
         st.error("Model not available. Please ensure the model file exists.")
     else:
-        # Prediction form with improved UX
-        with st.form("enhanced_prediction_form"):
+        with st.form("prediction_form"):
             st.markdown("### 👤 Personal Information")
             col1, col2 = st.columns(2)
-            
             with col1:
-                age = st.slider("Age", 18, 65, 30, help="Current age")
-                gender = st.selectbox("Gender", ["male", "female", "other"], 
-                                    help="Select gender identity")
-                
+                age = st.slider("Age", 18, 65, 30)
+                gender = st.selectbox("Gender", ["male", "female", "other"])
             with col2:
-                self_employed = st.radio("Employment Status", ["Yes", "No"], 
-                                       help="Are you self-employed?", key="self_emp")
-                family_history = st.radio("Family History", ["Yes", "No"], 
-                                        help="Family history of mental illness?", key="fam_hist")
+                self_employed = st.radio("Self-employed?", ["Yes", "No"])
+                family_history = st.radio("Family history of mental illness?", ["Yes", "No"])
             
             st.markdown("### 🏢 Work Environment")
             col1, col2, col3 = st.columns(3)
-            
             with col1:
-                work_interfere = st.selectbox("Work Interference", 
-                                            ["Never", "Rarely", "Sometimes", "Often"],
-                                            help="How often does mental health interfere with work?")
-                no_employees = st.selectbox("Company Size", 
-                                          ["1-5", "6-25", "26-100", "100-500", "500-1000", "More than 1000"])
-                
+                work_interfere = st.selectbox("Mental health interferes with work?", 
+                                              ["Never", "Rarely", "Sometimes", "Often"])
+                no_employees = st.selectbox("Number of employees", 
+                                            ["1-5", "6-25", "26-100", "100-500", "500-1000", "More than 1000"])
             with col2:
-                remote_work = st.radio("Remote Work", ["Yes", "No"], key="remote")
-                tech_company = st.radio("Tech Company", ["Yes", "No"], key="tech")
-                
+                remote_work = st.radio("Remote work allowed?", ["Yes", "No"])
+                tech_company = st.radio("Is it a tech company?", ["Yes", "No"])
             with col3:
-                benefits = st.radio("Mental Health Benefits", ["Yes", "No"], key="benefits")
-                care_options = st.selectbox("Care Options", ["Yes", "No", "Not sure"])
+                benefits = st.radio("Mental health benefits offered?", ["Yes", "No"])
+                care_options = st.selectbox("Mental health care options available?", ["Yes", "No", "Not sure"])
             
             st.markdown("### 🏥 Support & Policies")
             col1, col2 = st.columns(2)
-            
             with col1:
-                wellness_program = st.radio("Wellness Program", ["Yes", "No"], key="wellness")
-                seek_help = st.radio("Company Encourages Help", ["Yes", "No"], key="seek")
-                anonymity = st.selectbox("Anonymity Protection", ["Yes", "No", "Don't know"])
-                leave = st.selectbox("Mental Health Leave Ease", 
-                                   ["Very easy", "Somewhat easy", "Don't know", 
-                                    "Somewhat difficult", "Very difficult"])
-                
+                wellness_program = st.radio("Wellness program available?", ["Yes", "No"])
+                seek_help = st.radio("Company encourages help?", ["Yes", "No"])
+                anonymity = st.selectbox("Anonymity protected?", ["Yes", "No", "Don't know"])
+                leave = st.selectbox("Ease of mental health leave", 
+                                     ["Very easy", "Somewhat easy", "Don't know", 
+                                      "Somewhat difficult", "Very difficult"])
             with col2:
-                mental_health_consequence = st.selectbox("Mental Health Discussion Consequence", 
+                mental_health_consequence = st.selectbox("Negative consequence of mental health discussion?", 
+                                                         ["Yes", "No", "Maybe"])
+                phys_health_consequence = st.selectbox("Negative consequence of physical health discussion?", 
                                                        ["Yes", "No", "Maybe"])
-                phys_health_consequence = st.selectbox("Physical Health Discussion Consequence", 
-                                                     ["Yes", "No", "Maybe"])
-                coworkers = st.selectbox("Discuss with Coworkers", ["Yes", "No", "Some of them"])
-                supervisor = st.selectbox("Discuss with Supervisor", ["Yes", "No", "Some of them"])
+                coworkers = st.selectbox("Comfort with coworkers?", ["Yes", "No", "Some of them"])
+                supervisor = st.selectbox("Comfort with supervisor?", ["Yes", "No", "Some of them"])
             
             st.markdown("### 💼 Interview & Attitudes")
             col1, col2 = st.columns(2)
-            
             with col1:
-                mental_health_interview = st.selectbox("Mental Health in Interview", ["Yes", "No", "Maybe"])
-                phys_health_interview = st.selectbox("Physical Health in Interview", ["Yes", "No", "Maybe"])
-                
+                mental_health_interview = st.selectbox("Mental health in interview?", ["Yes", "No", "Maybe"])
+                phys_health_interview = st.selectbox("Physical health in interview?", ["Yes", "No", "Maybe"])
             with col2:
-                mental_vs_physical = st.selectbox("Mental vs Physical Health Importance", 
-                                                ["Yes", "No", "Don't know"])
-                obs_consequence = st.radio("Observed Negative Consequences", ["Yes", "No"], key="obs")
-
-            # Prediction button with enhanced styling
+                mental_vs_physical = st.selectbox("Equal importance of mental and physical health?", 
+                                                  ["Yes", "No", "Don't know"])
+                obs_consequence = st.radio("Have you observed negative consequences?", ["Yes", "No"])
+            
             submitted = st.form_submit_button("🚀 Generate Prediction", use_container_width=True)
 
         if submitted:
-            # Create input dataframe matching the EXACT format used during training
-            # Keep categorical columns as strings (for OneHotEncoder) and numerical as numbers
+            # Format user input into a DataFrame (keep strings!)
             input_data = pd.DataFrame([{
-                'Age': int(age),  # Ensure it's an integer
-                'Gender': gender.lower(),  # Keep as string for OneHotEncoder
-                'self_employed': self_employed,  # Keep as string for OneHotEncoder  
-                'family_history': family_history,  # Keep as string for OneHotEncoder
-                'work_interfere': work_interfere,  # Keep as string for OneHotEncoder
-                'no_employees': no_employees,  # Keep as string for OneHotEncoder
-                'remote_work': remote_work,  # Keep as string for OneHotEncoder
-                'tech_company': tech_company,  # Keep as string for OneHotEncoder
-                'benefits': benefits,  # Keep as string for OneHotEncoder
-                'care_options': care_options,  # Keep as string for OneHotEncoder
-                'wellness_program': wellness_program,  # Keep as string for OneHotEncoder
-                'seek_help': seek_help,  # Keep as string for OneHotEncoder
-                'anonymity': anonymity,  # Keep as string for OneHotEncoder
-                'leave': leave,  # Keep as string for OneHotEncoder
-                'mental_health_consequence': mental_health_consequence,  # Keep as string for OneHotEncoder
-                'phys_health_consequence': phys_health_consequence,  # Keep as string for OneHotEncoder
-                'coworkers': coworkers,  # Keep as string for OneHotEncoder
-                'supervisor': supervisor,  # Keep as string for OneHotEncoder
-                'mental_health_interview': mental_health_interview,  # Keep as string for OneHotEncoder
-                'phys_health_interview': phys_health_interview,  # Keep as string for OneHotEncoder
-                'mental_vs_physical': mental_vs_physical,  # Keep as string for OneHotEncoder
-                'obs_consequence': obs_consequence  # Keep as string for OneHotEncoder
+                'Age': age,
+                'Gender': gender.lower(),
+                'self_employed': self_employed,
+                'family_history': family_history,
+                'work_interfere': work_interfere,
+                'no_employees': no_employees,
+                'remote_work': remote_work,
+                'tech_company': tech_company,
+                'benefits': benefits,
+                'care_options': care_options,
+                'wellness_program': wellness_program,
+                'seek_help': seek_help,
+                'anonymity': anonymity,
+                'leave': leave,
+                'mental_health_consequence': mental_health_consequence,
+                'phys_health_consequence': phys_health_consequence,
+                'coworkers': coworkers,
+                'supervisor': supervisor,
+                'mental_health_interview': mental_health_interview,
+                'phys_health_interview': phys_health_interview,
+                'mental_vs_physical': mental_vs_physical,
+                'obs_consequence': obs_consequence
             }])
-            # Ensure proper data types
+
+            # Ensure correct types
             input_data['Age'] = input_data['Age'].astype(int)
-            
-            # Convert all other columns to strings to match training data format
             for col in input_data.columns:
-                if col != 'Age':  # Age should remain numeric
+                if col != 'Age':
                     input_data[col] = input_data[col].astype(str)
-            
-            # CRITICAL DEBUG: Compare with original training data
-            if df is not None:
-                #st.write("🔍 **DEBUGGING: Comparing formats**")
-                
-                # Show original training data format
-                original_features = [col for col in df.columns if col != 'treatment']
-                original_sample = df[original_features].head(1)
-                
-                #st.write("📊 **Original Training Data:**")
-                #st.dataframe(original_sample)
-                
-                #st.write("📊 **Your Input Data:**")
-                #st.dataframe(input_data)
-                
-                # Check for column mismatches
-                # missing_cols = set(original_features) - set(input_data.columns)
-                extra_cols = set(input_data.columns) - set(original_features)
-                
-                # if missing_cols:
-                #    st.error(f"❌ Missing columns in input: {missing_cols}")
-                if extra_cols:
-                    st.error(f"❌ Extra columns in input: {extra_cols}")
-                
-                # Try to create properly formatted input
-                #st.write("🔧 **Attempting to fix column alignment...**")
-                
-                try:
-                    # Create input with exact same columns as training data (excluding dropped columns)
-                    fixed_input = pd.DataFrame(columns=original_features)
-                    
-                    # Map input values to the correct columns
-                    for col in original_features:
-                        if col == 'Age':
-                            fixed_input.loc[0, col] = int(age)
-                        elif col == 'Gender':
-                            # Based on debug info, Gender in training data is int64, not string
-                            # check what the gender encoding was in original data
-                            # Typically: 0=female, 1=male, 2=other
-                            if gender.lower() == 'male':
-                                fixed_input.loc[0, col] = 1
-                            elif gender.lower() == 'female':
-                                fixed_input.loc[0, col] = 0
-                            else:  # other
-                                fixed_input.loc[0, col] = 2
-                        elif col == 'self_employed':
-                            fixed_input.loc[0, col] = self_employed
-                        elif col == 'family_history':
-                            fixed_input.loc[0, col] = family_history
-                        elif col == 'work_interfere':
-                            fixed_input.loc[0, col] = work_interfere
-                        elif col == 'no_employees':
-                            fixed_input.loc[0, col] = no_employees
-                        elif col == 'remote_work':
-                            fixed_input.loc[0, col] = remote_work
-                        elif col == 'tech_company':
-                            fixed_input.loc[0, col] = tech_company
-                        elif col == 'benefits':
-                            fixed_input.loc[0, col] = benefits
-                        elif col == 'care_options':
-                            fixed_input.loc[0, col] = care_options
-                        elif col == 'wellness_program':
-                            fixed_input.loc[0, col] = wellness_program
-                        elif col == 'seek_help':
-                            fixed_input.loc[0, col] = seek_help
-                        elif col == 'anonymity':
-                            fixed_input.loc[0, col] = anonymity
-                        elif col == 'leave':
-                            fixed_input.loc[0, col] = leave
-                        elif col == 'mental_health_consequence':
-                            fixed_input.loc[0, col] = mental_health_consequence
-                        elif col == 'phys_health_consequence':
-                            fixed_input.loc[0, col] = phys_health_consequence
-                        elif col == 'coworkers':
-                            fixed_input.loc[0, col] = coworkers
-                        elif col == 'supervisor':
-                            fixed_input.loc[0, col] = supervisor
-                        elif col == 'mental_health_interview':
-                            fixed_input.loc[0, col] = mental_health_interview
-                        elif col == 'phys_health_interview':
-                            fixed_input.loc[0, col] = phys_health_interview
-                        elif col == 'mental_vs_physical':
-                            fixed_input.loc[0, col] = mental_vs_physical
-                        elif col == 'obs_consequence':
-                            fixed_input.loc[0, col] = obs_consequence
-                        else:
-                            # Handle any unexpected columns
-                            fixed_input.loc[0, col] = 'Unknown'
-                    
-                    # Ensure proper data types match original exactly
-                    for col in fixed_input.columns:
-                        if col in original_sample.columns:
-                            original_dtype = original_sample[col].dtype
-                            if original_dtype == 'object':
-                                fixed_input[col] = fixed_input[col].astype(str)
-                            elif original_dtype in ['int64', 'int32']:
-                                fixed_input[col] = pd.to_numeric(fixed_input[col], errors='coerce').fillna(0).astype(int)
-                            elif original_dtype in ['float64', 'float32']:
-                                fixed_input[col] = pd.to_numeric(fixed_input[col], errors='coerce').fillna(0.0)
-                    
-                    # Use the fixed input for prediction
-                    input_data = fixed_input
-                except Exception as e:
-                    st.error(f"❌ Error aligning input columns: {str(e)}")
 
             try:
-                # Get prediction and probability
                 prediction = model.predict(input_data)[0]
-                prediction_proba = model.predict_proba(input_data)[0]
-                
-                # Display results with enhanced styling
-                col1, col2, col3 = st.columns([1, 2, 1])
-                with col2:
-                    if prediction == 1:
-                        st.markdown(f"""
-                            <div class="prediction-result success-prediction">
-                                🟢 HIGH LIKELIHOOD<br>
-                                Likely to Seek Treatment<br>
-                                <small>Confidence: {prediction_proba[1]:.1%}</small>
-                            </div>
-                        """, unsafe_allow_html=True)
-                    else:
-                        st.markdown(f"""
-                            <div class="prediction-result warning-prediction">
-                                🟡 LOW LIKELIHOOD<br>
-                                Unlikely to Seek Treatment<br>
-                                <small>Confidence: {prediction_proba[0]:.1%}</small>
-                            </div>
-                        """, unsafe_allow_html=True)
-                
-                # Probability breakdown
-                st.markdown("### 📊 Probability Breakdown")
+                proba = model.predict_proba(input_data)[0]
+
+                st.markdown("### 🔍 Prediction Result")
+                if prediction == 1:
+                    st.success(f"🟢 Likely to Seek Mental Health Treatment\n\nConfidence: {proba[1]:.1%}")
+                else:
+                    st.warning(f"🟡 Unlikely to Seek Mental Health Treatment\n\nConfidence: {proba[0]:.1%}")
+
+                st.markdown("### 📊 Probability Chart")
                 prob_df = pd.DataFrame({
                     'Outcome': ['No Treatment', 'Seek Treatment'],
-                    'Probability': [prediction_proba[0], prediction_proba[1]]
+                    'Probability': proba
                 })
-                
-                fig = px.bar(prob_df, x='Outcome', y='Probability', 
-                        color='Probability', color_continuous_scale='RdYlGn',
-                        title="Prediction Probabilities")
+                fig = px.bar(prob_df, x='Outcome', y='Probability',
+                             color='Probability', color_continuous_scale='RdYlGn')
                 st.plotly_chart(fig, use_container_width=True)
-                
-                # Show input summary
-                with st.expander("📋 View Input Summary"):
-                    st.dataframe(input_data.T, use_container_width=True)
-                    
+
+                with st.expander("📋 View Your Input Summary"):
+                    st.dataframe(input_data.T)
+
             except Exception as e:
-                st.error(f"❌ Prediction failed: {str(e)}")
-                # Optional: Add a simple error message for users
+                st.error(f"❌ Prediction failed: {e}")
                 st.info("💡 Please ensure all form fields are filled correctly and try again.")
 
 # -------------------- MODEL PERFORMANCE -------------------- #
