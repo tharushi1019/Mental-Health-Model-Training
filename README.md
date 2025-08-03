@@ -6,7 +6,7 @@
 
 A machine learning web application to predict the likelihood of seeking mental health treatment, based on survey responses from tech industry professionals. Built with **Streamlit**, trained using **scikit-learn**, and deployed to **Streamlit Cloud**.
 
-🔗 **[Live Demo](https://mental-health-model-training-6nwixgo3yrtk54z62pdszd.streamlit.app/)**  
+🔗 **[Live Demo](https://mental-health-model-training-fgqtqv6kvfdykrgzjyptiu.streamlit.app/)**  
 📘 **[Dataset (Kaggle)](https://www.kaggle.com/datasets/osmi/mental-health-in-tech-survey)**
 
 ---
